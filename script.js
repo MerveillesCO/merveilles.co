@@ -15,17 +15,76 @@ const zoneContent = {
   future: { kicker: 'Southern reach', title: 'The Further Grounds', copy: 'A breathing space for future marvels and small event-linked camping—developed slowly, only as the land and approvals allow.', list: ['Reservation-only camping glade', 'Future installations', 'Protected operating buffer'] }
 };
 
+const projectContent = {
+  grove: { kicker: 'The Garden · living project', title: 'The Grove', copy: 'A gathering place composed around one centered tree—the living heart of the garden, with paths, shade, and shared tables radiating outward.', list: ['Centered tree', 'Circular gathering ground', 'Shade, table & ceremony'] },
+  tikidome: { kicker: 'Maravilla · curious structure', title: 'The Enchanted TikiDome', copy: 'A playful, immersive shelter where tropical fantasy, hand-built ornament, light, and sound meet the Colorado woods.', list: ['Existing-condition portrait', 'Enchanted concept study', 'Lighting & material experiments'] },
+  'gothic-orchestra': { kicker: 'North Stage · sound project', title: 'The Gothic Orchestra', copy: 'A strange ensemble in the trees: part instrument, part sculpture, and part nocturnal theatre.', list: ['Current installation study', 'Expanded musical canopy', 'Night-lighting concept'] },
+  vardo: { kicker: 'Fære · intimate chamber', title: 'The Vardo', copy: 'A painted caravan and tiny chamber for stories, readings, fortune, and close encounters.', list: ['Current caravan portrait', 'Interior atmosphere study', 'Arrival & setting concept'] },
+  aerie: { kicker: 'Maravilla · lookout project', title: 'The Ærie', copy: 'A small elevated refuge for watching weather, listening to the woods, and seeing the garden from another height.', list: ['Existing structure', 'Canopy relationship', 'Future lookout study'] },
+  chashitsu: { kicker: 'The Garden · quiet project', title: 'The Chashitsu', copy: 'A small tea house where attention, quiet, and hospitality become the event.', list: ['Current site portrait', 'Tea-house concept', 'Threshold & garden study'] },
+  'north-stage': { kicker: 'North Performance · stage project', title: 'The North Stage', copy: 'An intimate woodland proscenium for strings, voices, stories, and performances shaped to the living canopy.', list: ['Current clearing portrait', 'Stage elevation study', 'Audience & lighting concept'] },
+  'container-adobe': { kicker: 'The Chateau · building project', title: 'The Container Adobe', copy: 'A practical container structure softened into the garden with earthen texture, deep openings, shade, and a sense of hand-built permanence.', list: ['Current container portrait', 'Adobe exterior study', 'Doors, shade & planting concept'] },
+  'south-stage': { kicker: 'South Performance · stage project', title: 'The South Stage', copy: 'A lively open-air platform for dance, theatre, games, and the garden’s larger gestures.', list: ['Current ground portrait', 'Stage & canopy study', 'Performance-lighting concept'] },
+  'mushroom-grove': { kicker: 'Fære · play project', title: 'The Mushroom Grove', copy: 'A pocket of Fære devoted to scale, color, games, and improbable encounters.', list: ['Current woodland floor', 'Enlarged mushroom study', 'Play & lighting concept'] },
+  'camping-glade': { kicker: 'Further Grounds · future project', title: 'The Camping Glade', copy: 'A small, event-linked camping clearing shaped by quiet hours, light touch, and the practical needs of hosted stays.', list: ['Existing ground conditions', 'Low-impact layout study', 'Subject to access & approvals'] }
+};
+
 const detail = document.querySelector('[data-map-detail]');
 const zones = [...document.querySelectorAll('[data-zone]')];
+const projectMarkers = [...document.querySelectorAll('[data-project]')];
+const projectMedia = detail?.querySelector('[data-project-media]');
+
+function setMapDetail(content) {
+  detail.querySelector('[data-zone-kicker]').textContent = content.kicker;
+  detail.querySelector('[data-zone-title]').textContent = content.title;
+  detail.querySelector('[data-zone-copy]').textContent = content.copy;
+  detail.querySelector('[data-zone-list]').innerHTML = content.list.map(item => `<li>${item}</li>`).join('');
+}
+
+function setProjectImage(slot, source, alt, placeholder) {
+  slot.querySelector('img')?.remove();
+  slot.querySelector('span').hidden = Boolean(source);
+  slot.querySelector('small').hidden = Boolean(source);
+  if (source) {
+    const image = document.createElement('img');
+    image.src = source;
+    image.alt = alt;
+    slot.prepend(image);
+  } else {
+    slot.querySelector('small').textContent = placeholder;
+  }
+}
 
 function selectZone(zone) {
   const content = zoneContent[zone.dataset.zone];
   if (!content || !detail) return;
   zones.forEach(item => item.classList.toggle('active', item === zone));
-  detail.querySelector('[data-zone-kicker]').textContent = content.kicker;
-  detail.querySelector('[data-zone-title]').textContent = content.title;
-  detail.querySelector('[data-zone-copy]').textContent = content.copy;
-  detail.querySelector('[data-zone-list]').innerHTML = content.list.map(item => `<li>${item}</li>`).join('');
+  projectMarkers.forEach(item => item.classList.remove('active'));
+  if (projectMedia) projectMedia.hidden = true;
+  setMapDetail(content);
+}
+
+function selectProject(marker) {
+  const content = projectContent[marker.dataset.project];
+  if (!content || !detail) return;
+  zones.forEach(item => item.classList.remove('active'));
+  projectMarkers.forEach(item => item.classList.toggle('active', item === marker));
+  setMapDetail(content);
+  if (projectMedia) {
+    projectMedia.hidden = false;
+    setProjectImage(
+      projectMedia.querySelector('[data-current-image]'),
+      content.currentImage,
+      `${content.title}, current condition`,
+      `${content.title} photo placeholder`
+    );
+    setProjectImage(
+      projectMedia.querySelector('[data-envisioned-image]'),
+      content.envisionedImage,
+      `${content.title}, envisioned concept`,
+      `${content.title} concept placeholder`
+    );
+  }
 }
 
 zones.forEach(zone => {
@@ -34,6 +93,16 @@ zones.forEach(zone => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       selectZone(zone);
+    }
+  });
+});
+
+projectMarkers.forEach(marker => {
+  marker.addEventListener('click', () => selectProject(marker));
+  marker.addEventListener('keydown', event => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      selectProject(marker);
     }
   });
 });
@@ -52,6 +121,7 @@ const symbolGlyphs = {
 };
 
 const countryMap = document.querySelector('[data-country-map]');
+const countryRoads = document.querySelector('[data-country-roads]');
 const countryMarkers = document.querySelector('[data-country-markers]');
 const countryDetail = document.querySelector('[data-country-detail]');
 const filterButtons = [...document.querySelectorAll('[data-map-filter]')];
@@ -95,12 +165,19 @@ function showCountryFeature(marker, feature) {
 }
 
 async function buildCountryMap() {
-  if (!countryMap || !countryMarkers || !countryDetail) return;
+  if (!countryMap || !countryRoads || !countryMarkers || !countryDetail) return;
 
   try {
-    const response = await fetch('data/locations.geojson');
-    if (!response.ok) throw new Error(`Map data returned ${response.status}`);
-    const collection = await response.json();
+    const [locationResponse, roadResponse] = await Promise.all([
+      fetch('data/locations.geojson'),
+      fetch('data/roads.geojson')
+    ]);
+    if (!locationResponse.ok) throw new Error(`Location data returned ${locationResponse.status}`);
+    if (!roadResponse.ok) throw new Error(`Road data returned ${roadResponse.status}`);
+    const [collection, roadCollection] = await Promise.all([
+      locationResponse.json(),
+      roadResponse.json()
+    ]);
     const bounds = collection.metadata.bounds;
     const width = 1000;
     const height = 920;
@@ -109,6 +186,23 @@ async function buildCountryMap() {
       padding + ((longitude - bounds.west) / (bounds.east - bounds.west)) * (width - padding * 2),
       padding + ((bounds.north - latitude) / (bounds.north - bounds.south)) * (height - padding * 2)
     ];
+
+    roadCollection.features.forEach((feature, index) => {
+      const points = feature.geometry.coordinates.map(project);
+      const path = svgElement('path', {
+        id: `country-road-${index}`,
+        class: `country-road ${feature.properties.class || 'local'}`,
+        d: points.map(([x, y], pointIndex) => `${pointIndex ? 'L' : 'M'}${x.toFixed(2)} ${y.toFixed(2)}`).join(' ')
+      });
+      const label = svgElement('text', { class: 'country-road-label' });
+      const labelPath = svgElement('textPath', {
+        href: `#country-road-${index}`,
+        startOffset: feature.properties.labelOffset || '50%'
+      });
+      labelPath.textContent = feature.properties.name;
+      label.append(labelPath);
+      countryRoads.append(path, label);
+    });
 
     collection.features.forEach(feature => {
       const properties = feature.properties;

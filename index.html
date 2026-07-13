@@ -73,8 +73,7 @@
               <g class="country-contours" aria-hidden="true"><path d="M-20 95Q170 20 355 92t330-8q172-70 350 27"/><path d="M-40 194q167-62 323-6t282 0q208-73 471 34"/><path d="M-20 729q167-53 330 17t327-8q157-61 385 18"/><path d="M-15 826q218-58 402 11t298-3q141-57 342 7"/></g>
               <path class="country-range" d="M-20 0h420q-13 102-74 174t-11 149q48 80 2 157t14 142q58 87 16 298H-20Z" fill="url(#country-trees)" aria-hidden="true"/>
               <g class="country-mountains" aria-hidden="true"><path d="M31 782 89 689l54 93 47-69 60 91M36 598l47-74 46 74 40-57 49 67M44 395l41-67 42 67 35-48 44 57M53 185l38-59 38 59 31-43 39 53"/><text x="125" y="455" transform="rotate(-85 125 455)">The Rampart Range</text></g>
-              <path class="country-road interstate" d="M827-20q-14 157 18 278t-7 257q-25 112 11 233t-3 192" aria-hidden="true"/><text class="country-road-label" x="865" y="456" transform="rotate(88 865 456)">The Great North Road · I–25</text>
-              <path class="country-road" d="M834 507q-114 8-203 18t-182-3" aria-hidden="true"/><text class="country-road-label" x="647" y="508">Highway 105</text>
+              <g data-country-roads aria-hidden="true"></g>
               <path class="country-water" d="M458 569q37-28 67 3t-5 63q-37 28-69-3t7-63Z" aria-hidden="true"/>
               <text class="country-place-label" x="527" y="598">Palmer Lake</text><text class="country-place-label" x="763" y="760">Monument</text><text class="country-place-label" x="720" y="92">Larkspur</text>
               <g data-country-markers></g>
@@ -82,7 +81,7 @@
               <path class="country-border" d="M24 25h952v870H24Z" aria-hidden="true"/>
             </svg>
           </div>
-          <p class="country-caption">Geographic positions are projected from <code>data/locations.geojson</code>. Illustrated terrain and roads are interpretive; this is not a navigation map.</p>
+          <p class="country-caption">Places and roads are projected from GeoJSON. Road lines are simplified for this illustrated chart; this is not a navigation map.</p>
         </div>
         <aside class="country-detail" data-country-detail aria-live="polite"><p class="map-rune" aria-hidden="true">✦</p><p class="eyebrow dark" data-country-subtitle>The Merveilles Country</p><h3 data-country-title>Choose a landmark.</h3><p data-country-copy>Follow the chart from the northern revels to the lake, stones, trails, and high wooded places surrounding the garden.</p><p class="precision-note" data-country-precision hidden></p><div class="country-links"><a data-country-directions hidden>Open directions ↗</a><a data-country-source hidden>View source ↗</a></div><p class="edit-note">New places are added in one file:<br><a href="data/locations.geojson"><code>data/locations.geojson</code></a></p></aside>
       </div>
@@ -118,23 +117,29 @@
             <g class="zone zone-faere" tabindex="0" role="button" aria-label="Explore Fære" data-zone="faere"><path d="M602 264Q723 237 840 279L842 630Q718 651 594 625Z"/><text x="720" y="432"><tspan>Fære</tspan><tspan x="720" dy="29" class="zone-sub">mushrooms · marvels · play</tspan></text></g>
             <g class="zone zone-future" tabindex="0" role="button" aria-label="Explore the Future Grounds and camping glade" data-zone="future"><path d="M77 667Q458 638 843 671L902 789 44 784Z"/><text x="474" y="723"><tspan>The Further Grounds</tspan><tspan x="474" dy="30" class="zone-sub">camping glade · future wonders</tspan></text></g>
 
-            <g class="landmarks" aria-hidden="true">
+            <g class="landmarks">
               <path class="pathway" d="M113 573Q188 500 133 419t95-120Q305 275 404 311t139 78q73 71 150 30"/>
               <text x="102" y="534" transform="rotate(-52 102 534)">The Dark Walk</text>
               <text x="142" y="309">The Promenade</text>
-              <g transform="translate(455 195)"><circle r="25"/><path d="M0 22V-21m0 9-14-13m14 19 15-14"/><text x="0" y="41">The Grove</text></g>
-              <g transform="translate(770 324)"><path d="M-23 18Q0-30 23 18Z"/><circle cy="-5" r="5"/><text x="0" y="38">Gothic Orchestra</text></g>
-              <g transform="translate(818 540)"><path d="M-25 13V-13Q0-32 25-13V13Z"/><circle cx="-12" cy="4" r="8"/><circle cx="14" cy="4" r="8"/><text x="0" y="36">Vardo</text></g>
-              <g transform="translate(215 170)"><path d="m-20 18 20-36 20 36M-12 4h24"/><text x="0" y="37">The Ærie</text></g>
-              <g class="tents" transform="translate(680 711)"><path d="m-55 15 19-30 19 30Zm55 0 19-30 19 30Zm55 0 19-30 19 30Z"/><text x="20" y="41">Camping Glade</text></g>
-              <g class="compass" transform="translate(920 698)"><circle r="43"/><path d="M0-38 9-8 38 0 9 8 0 38-9 8-38 0-9-8Z"/><text x="0" y="-49">N</text></g>
+              <g class="project-marker" tabindex="0" role="button" aria-label="Explore the Grove project" data-project="grove" transform="translate(455 195)"><circle r="25"/><path d="M0 22V-21m0 9-14-13m14 19 15-14"/><text x="0" y="41">The Grove</text></g>
+              <g class="project-marker dome-marker" tabindex="0" role="button" aria-label="Explore the Enchanted TikiDome project" data-project="tikidome" transform="translate(285 190)"><path d="M-28 16Q0-28 28 16ZM-19 16Q-14-12 0-28M19 16Q14-12 0-28M-28 16h56M-23 3h46M-12-15h24"/><circle cy="-2" r="3"/><text x="0" y="42">Enchanted TikiDome</text></g>
+              <g class="project-marker" tabindex="0" role="button" aria-label="Explore the Gothic Orchestra project" data-project="gothic-orchestra" transform="translate(770 324)"><path d="M-23 18Q0-30 23 18Z"/><circle cy="-5" r="5"/><text x="0" y="38">Gothic Orchestra</text></g>
+              <g class="project-marker" tabindex="0" role="button" aria-label="Explore the Vardo project" data-project="vardo" transform="translate(818 540)"><path d="M-25 13V-13Q0-32 25-13V13Z"/><circle cx="-12" cy="4" r="8"/><circle cx="14" cy="4" r="8"/><text x="0" y="36">Vardo</text></g>
+              <g class="project-marker" tabindex="0" role="button" aria-label="Explore the Ærie project" data-project="aerie" transform="translate(215 170)"><path d="m-20 18 20-36 20 36M-12 4h24"/><text x="0" y="37">The Ærie</text></g>
+              <g class="project-marker" tabindex="0" role="button" aria-label="Explore the Chashitsu project" data-project="chashitsu" transform="translate(530 210)"><path d="M-20 13V-8L0-22 20-8v21M-25 13h50M0-22v35"/><text x="0" y="34">Chashitsu</text></g>
+              <g class="project-marker stage-marker" tabindex="0" role="button" aria-label="Explore the North Stage project" data-project="north-stage" transform="translate(535 344)"><path d="M-25 15V-13Q0-27 25-13V15M-29 15h58M-18 15V-5h36v20M-10-5v20M10-5v20"/><text x="0" y="34">North Stage</text></g>
+              <g class="project-marker adobe-marker" tabindex="0" role="button" aria-label="Explore the Container Adobe project" data-project="container-adobe" transform="translate(525 466)"><path d="M-42 14V-13Q-20-19 0-14 21-20 42-13V14ZM-31 14V-2h14v16M15 14V-1q10-9 19 0v15M-42-8h84"/><text x="0" y="34">Container Adobe</text></g>
+              <g class="project-marker stage-marker" tabindex="0" role="button" aria-label="Explore the South Stage project" data-project="south-stage" transform="translate(530 603)"><path d="M-25 15V-13Q0-27 25-13V15M-29 15h58M-18 15V-5h36v20M-10-5v20M10-5v20"/><text x="0" y="34">South Stage</text></g>
+              <g class="project-marker" tabindex="0" role="button" aria-label="Explore the Mushroom Grove project" data-project="mushroom-grove" transform="translate(665 540)"><path d="M-24 1Q0-27 24 1ZM0 1v25M-10 26h20"/><text x="0" y="44">Mushroom Grove</text></g>
+              <g class="project-marker tents" tabindex="0" role="button" aria-label="Explore the Camping Glade project" data-project="camping-glade" transform="translate(680 711)"><path d="m-55 15 19-30 19 30Zm55 0 19-30 19 30Zm55 0 19-30 19 30Z"/><text x="20" y="41">Camping Glade</text></g>
+              <g class="compass" transform="translate(920 698)" aria-hidden="true"><circle r="43"/><path d="M0-38 9-8 38 0 9 8 0 38-9 8-38 0-9-8Z"/><text x="0" y="-49">N</text></g>
             </g>
             <path class="border-ornament" d="M25 31h950v758H25Z" aria-hidden="true"/>
           </svg>
         </div>
 
         <aside class="map-detail" aria-live="polite" data-map-detail>
-          <p class="map-rune" aria-hidden="true">✦</p><p class="eyebrow dark" data-zone-kicker>Begin anywhere</p><h3 data-zone-title>The map is awake.</h3><p data-zone-copy>Choose a named region. The chart will reveal what lives there—and what might yet be made.</p><ul data-zone-list><li>Nine garden realms</li><li>Paths, follies, performances</li><li>A landscape still becoming</li></ul><p class="map-note">Conceptual locations and uses will evolve with the land.</p>
+          <p class="map-rune" aria-hidden="true">✦</p><p class="eyebrow dark" data-zone-kicker>Begin anywhere</p><h3 data-zone-title>The map is awake.</h3><p data-zone-copy>Choose a named region or project. The chart will reveal what lives there—and what might yet be made.</p><ul data-zone-list><li>Nine garden realms</li><li>Select project names for their story</li><li>Current and envisioned image studies</li></ul><div class="project-media" data-project-media hidden><figure><div class="project-image-slot" data-current-image><span>Current</span><small>Photo placeholder</small></div><figcaption>The place as it is now</figcaption></figure><figure><div class="project-image-slot envisioned" data-envisioned-image><span>Envisioned</span><small>AI-enhanced placeholder</small></div><figcaption>A possible future expression</figcaption></figure></div><p class="map-note">Conceptual locations and uses will evolve with the land.</p>
         </aside>
       </div>
     </section>

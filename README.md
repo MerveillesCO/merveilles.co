@@ -12,7 +12,9 @@ The public concept site is published at [merveilles.co](https://merveilles.co).
 - [Site operations](docs/site-operations.md) — access, parking, utilities, sanitation, and emergency planning
 - `index.html`, `styles.css`, and `script.js` — public website and interactive property map
 - [`data/locations.geojson`](data/locations.geojson) — editable source for the regional map
+- [`data/roads.geojson`](data/roads.geojson) — simplified projected roads for regional orientation
 - [Adding map locations](docs/adding-map-locations.md) — one-record map editing guide
+- [Adding project images](docs/adding-project-images.md) — replace Current and Envisioned placeholders
 
 ## Relationship to AfterFaire
 
