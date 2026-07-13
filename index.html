@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Merveilles Pleasure Gardens: a living, dreaming garden of art, paths, gatherings, camping, music, and marvels in the Colorado forest.">
+  <meta name="theme-color" content="#17251d">
+  <link rel="canonical" href="https://merveilles.co/">
+  <title>Merveilles Pleasure Gardens</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&amp;family=IM+Fell+English+SC&amp;family=Manrope:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to the gardens</a>
+
+  <header class="site-header" data-header>
+    <a class="wordmark" href="#top" aria-label="Merveilles home">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 43V13M24 22c-6-1-10-5-11-11 6 1 10 5 11 11Zm0 8c7-1 12-5 14-12-7 1-12 5-14 12Z"/><circle cx="24" cy="8" r="3"/></svg>
+      <span>Merveilles</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="#vision">The vision</a>
+      <a href="#map">Explore the map</a>
+      <a href="#gather">Gather here</a>
+      <a class="nav-cta" href="#begin">Enter the story</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="hero-forest" aria-hidden="true">
+        <span class="tree tree-one"></span><span class="tree tree-two"></span><span class="tree tree-three"></span><span class="tree tree-four"></span><span class="tree tree-five"></span>
+        <span class="lantern lantern-one"></span><span class="lantern lantern-two"></span><span class="lantern lantern-three"></span>
+      </div>
+      <div class="hero-copy">
+        <p class="eyebrow">A pleasure garden in the Colorado woods</p>
+        <h1 id="hero-title">A landscape<br>of <em>marvels.</em></h1>
+        <p>We envision a forest transformed—not tamed, but invited—into wonder. A place where art grows like moss, lights and laughter linger beneath the trees, and every path leads to a new delight.</p>
+        <div class="hero-actions"><a class="button" href="#map">Unfold the map</a><a class="quiet-link" href="#vision">Read the invitation ↓</a></div>
+      </div>
+      <p class="hero-mark">Est. in imagination · growing by hand</p>
+    </section>
+
+    <section class="vision section-shell" id="vision" aria-labelledby="vision-title">
+      <p class="section-number">I · The invitation</p>
+      <div class="vision-heading"><p class="eyebrow dark">Merveilles · “Marvels”</p><h2 id="vision-title">The forest is not our canvas.<br><em>It is our collaborator.</em></h2></div>
+      <div class="vision-copy"><p>Inspired by the spirit of historic pleasure gardens, Merveilles brings music, masks, mystery, and moonlight into the woods. It is not a replica of another age, but a living place for serendipity.</p><p>Follies, performances, lantern walks, games, suppers, and quiet clearings emerge slowly and deliberately. Some marvels will weather and return to earth. Others will evolve. All of them belong to the landscape.</p></div>
+    </section>
+
+    <section class="country-section" id="map" aria-labelledby="country-title">
+      <div class="country-heading section-shell"><p class="section-number">II · The country roundabout</p><div><p class="eyebrow dark">A true chart, fancifully drawn</p><h2 id="country-title">From the Faire<br>to the high wilds.</h2></div><p>Every marker is placed from real latitude and longitude. Select one to read its tale; use the filters to reveal different kinds of marvel.</p></div>
+      <div class="country-layout section-shell">
+        <div class="country-map-wrap">
+          <div class="map-toolbar" aria-label="Map filters">
+            <button type="button" class="active" data-map-filter="all">All places</button>
+            <button type="button" data-map-filter="peak">Heights</button>
+            <button type="button" data-map-filter="landform">Stones</button>
+            <button type="button" data-map-filter="history">Histories</button>
+            <button type="button" data-map-filter="trail">Trails</button>
+          </div>
+          <div class="country-scroll" aria-label="Scrollable regional map">
+            <svg class="country-map" data-country-map viewBox="0 0 1000 920" role="img" aria-labelledby="country-svg-title country-svg-desc">
+              <title id="country-svg-title">Illustrated regional map around Merveilles Pleasure Gardens</title>
+              <desc id="country-svg-desc">A parchment chart from the Colorado Renaissance Festival south through Palmer Lake and the Rampart Range, with selectable landmarks placed from geographic coordinates.</desc>
+              <defs>
+                <radialGradient id="country-paper" cx="58%" cy="45%"><stop offset="0" stop-color="#f6e8c1"/><stop offset=".72" stop-color="#e3cd96"/><stop offset="1" stop-color="#bd985c"/></radialGradient>
+                <filter id="country-rough"><feTurbulence type="fractalNoise" baseFrequency=".014" numOctaves="3" seed="31" result="noise"/><feDisplacementMap in="SourceGraphic" in2="noise" scale="7"/></filter>
+                <pattern id="country-trees" width="38" height="42" patternUnits="userSpaceOnUse"><path d="m6 35 8-22 8 22m-12-9h8m10 10 7-19 7 19m-10-7h7"/></pattern>
+              </defs>
+              <rect width="1000" height="920" fill="url(#country-paper)"/>
+              <g class="country-contours" aria-hidden="true"><path d="M-20 95Q170 20 355 92t330-8q172-70 350 27"/><path d="M-40 194q167-62 323-6t282 0q208-73 471 34"/><path d="M-20 729q167-53 330 17t327-8q157-61 385 18"/><path d="M-15 826q218-58 402 11t298-3q141-57 342 7"/></g>
+              <path class="country-range" d="M-20 0h420q-13 102-74 174t-11 149q48 80 2 157t14 142q58 87 16 298H-20Z" fill="url(#country-trees)" aria-hidden="true"/>
+              <g class="country-mountains" aria-hidden="true"><path d="M31 782 89 689l54 93 47-69 60 91M36 598l47-74 46 74 40-57 49 67M44 395l41-67 42 67 35-48 44 57M53 185l38-59 38 59 31-43 39 53"/><text x="125" y="455" transform="rotate(-85 125 455)">The Rampart Range</text></g>
+              <path class="country-road interstate" d="M827-20q-14 157 18 278t-7 257q-25 112 11 233t-3 192" aria-hidden="true"/><text class="country-road-label" x="865" y="456" transform="rotate(88 865 456)">The Great North Road · I–25</text>
+              <path class="country-road" d="M834 507q-114 8-203 18t-182-3" aria-hidden="true"/><text class="country-road-label" x="647" y="508">Highway 105</text>
+              <path class="country-water" d="M458 569q37-28 67 3t-5 63q-37 28-69-3t7-63Z" aria-hidden="true"/>
+              <text class="country-place-label" x="527" y="598">Palmer Lake</text><text class="country-place-label" x="763" y="760">Monument</text><text class="country-place-label" x="720" y="92">Larkspur</text>
+              <g data-country-markers></g>
+              <g class="country-compass" transform="translate(913 814)" aria-hidden="true"><circle r="50"/><path d="M0-45 10-10 45 0 10 10 0 45-10 10-45 0-10-10Z"/><text y="-59">N</text></g>
+              <path class="country-border" d="M24 25h952v870H24Z" aria-hidden="true"/>
+            </svg>
+          </div>
+          <p class="country-caption">Geographic positions are projected from <code>data/locations.geojson</code>. Illustrated terrain and roads are interpretive; this is not a navigation map.</p>
+        </div>
+        <aside class="country-detail" data-country-detail aria-live="polite"><p class="map-rune" aria-hidden="true">✦</p><p class="eyebrow dark" data-country-subtitle>The Merveilles Country</p><h3 data-country-title>Choose a landmark.</h3><p data-country-copy>Follow the chart from the northern revels to the lake, stones, trails, and high wooded places surrounding the garden.</p><p class="precision-note" data-country-precision hidden></p><div class="country-links"><a data-country-directions hidden>Open directions ↗</a><a data-country-source hidden>View source ↗</a></div><p class="edit-note">New places are added in one file:<br><a href="data/locations.geojson"><code>data/locations.geojson</code></a></p></aside>
+      </div>
+    </section>
+
+    <section class="map-section" id="grounds" aria-labelledby="map-title">
+      <div class="map-heading section-shell"><p class="section-number">III · Within the garden gates</p><div><p class="eyebrow">Choose a region</p><h2 id="map-title">Where the paths may lead.</h2></div><p>This is an interpretive property plan, not a survey. Select a region to discover its character, landmarks, and possible uses.</p></div>
+      <div class="map-layout section-shell">
+        <div class="map-scroll" aria-label="Scrollable property map">
+          <svg class="property-map" viewBox="0 0 1000 820" role="img" aria-labelledby="map-svg-title map-svg-desc">
+            <title id="map-svg-title">Interactive map of Merveilles Pleasure Gardens</title>
+            <desc id="map-svg-desc">A parchment fantasy map with nine selectable regions arranged according to the Merveilles concept plan.</desc>
+            <defs>
+              <filter id="paper-noise"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="4" seed="17" result="noise"/><feColorMatrix in="noise" type="saturate" values="0" result="gray"/><feBlend in="SourceGraphic" in2="gray" mode="multiply"/></filter>
+              <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency=".018" numOctaves="2" seed="9" result="turbulence"/><feDisplacementMap in="SourceGraphic" in2="turbulence" scale="5" xChannelSelector="R" yChannelSelector="G"/></filter>
+              <pattern id="forest-pattern" width="55" height="48" patternUnits="userSpaceOnUse"><path d="M9 39 18 18l9 21M13 30h10M35 40l9-25 10 25M39 30h11"/></pattern>
+              <pattern id="garden-pattern" width="44" height="44" patternUnits="userSpaceOnUse"><path d="M22 37V18m0 5c-8-1-11-5-12-10 7 1 11 4 12 10Zm0 7c8-1 11-5 12-10-7 1-11 4-12 10Z"/></pattern>
+              <radialGradient id="parchment" cx="45%" cy="42%"><stop offset="0" stop-color="#f3e2b7"/><stop offset=".72" stop-color="#ddc58e"/><stop offset="1" stop-color="#b99659"/></radialGradient>
+            </defs>
+            <rect width="1000" height="820" rx="3" fill="url(#parchment)"/>
+            <g class="contours" aria-hidden="true"><path d="M40 120C160 40 320 90 430 42S730 14 944 86"/><path d="M46 690c134-74 259-18 391 14s307 61 515-12"/><path d="M715 80c91 66 108 145 184 187"/><path d="M58 314c73-50 126-31 175-91"/></g>
+            <g class="mountains" aria-hidden="true"><path d="m62 80 24-35 24 35 20-28 26 40M790 735l25-38 26 38 22-30 31 43"/><path d="m78 80 8-12 8 12m714 655 7-11 8 11"/></g>
+            <path class="road" d="M886 5c-7 116 24 192-54 269-41 41-61 63-55 122" aria-hidden="true"/>
+            <text class="road-label" x="880" y="115" transform="rotate(83 880 115)">Indi Drive</text>
+
+            <g class="zone zone-maravilla" tabindex="0" role="button" aria-label="Explore Maravilla" data-zone="maravilla"><path d="M75 92Q210 49 355 87L343 236Q204 215 78 248Z"/><text x="210" y="154"><tspan>Maravilla</tspan><tspan x="210" dy="29" class="zone-sub">the cabinet of curiosities</tspan></text></g>
+            <g class="zone zone-garden" tabindex="0" role="button" aria-label="Explore the Garden" data-zone="garden"><path d="M368 83Q475 66 576 96L568 241Q472 222 365 244Z"/><path class="zone-pattern" d="M368 83Q475 66 576 96L568 241Q472 222 365 244Z" fill="url(#garden-pattern)"/><text x="470" y="148"><tspan>The Garden</tspan><tspan x="470" dy="29" class="zone-sub">orchard · grove · table</tspan></text></g>
+            <g class="zone zone-studio" tabindex="0" role="button" aria-label="Explore the Studio" data-zone="studio"><path d="M594 89 701 107 691 241 587 229Z"/><text x="642" y="154"><tspan>The Studio</tspan><tspan x="642" dy="27" class="zone-sub">making · movement</tspan></text></g>
+            <g class="zone zone-forest" tabindex="0" role="button" aria-label="Explore the Forest" data-zone="forest"><path d="M69 269Q207 241 356 263L351 636Q200 659 72 623Z"/><path class="zone-pattern" d="M69 269Q207 241 356 263L351 636Q200 659 72 623Z" fill="url(#forest-pattern)"/><text x="210" y="421"><tspan>The Forest</tspan><tspan x="210" dy="30" class="zone-sub">promenade · dark walk</tspan></text></g>
+            <g class="zone zone-north" tabindex="0" role="button" aria-label="Explore North Performance" data-zone="north"><path d="M377 260Q475 245 581 268L574 375 366 374Z"/><text x="473" y="309"><tspan>North Stage</tspan><tspan x="473" dy="28" class="zone-sub">music beneath the boughs</tspan></text></g>
+            <g class="zone zone-chateau" tabindex="0" role="button" aria-label="Explore the Chateau and Patio" data-zone="chateau"><path d="M367 391 573 391 566 492 370 492Z"/><text x="468" y="438"><tspan>The Chateau</tspan><tspan x="468" dy="28" class="zone-sub">patio · hearth · table</tspan></text></g>
+            <g class="zone zone-south" tabindex="0" role="button" aria-label="Explore South Performance" data-zone="south"><path d="M368 510 566 508 572 632Q476 650 370 629Z"/><text x="469" y="563"><tspan>South Stage</tspan><tspan x="469" dy="28" class="zone-sub">dance · theatre · games</tspan></text></g>
+            <g class="zone zone-faere" tabindex="0" role="button" aria-label="Explore Fære" data-zone="faere"><path d="M602 264Q723 237 840 279L842 630Q718 651 594 625Z"/><text x="720" y="432"><tspan>Fære</tspan><tspan x="720" dy="29" class="zone-sub">mushrooms · marvels · play</tspan></text></g>
+            <g class="zone zone-future" tabindex="0" role="button" aria-label="Explore the Future Grounds and camping glade" data-zone="future"><path d="M77 667Q458 638 843 671L902 789 44 784Z"/><text x="474" y="723"><tspan>The Further Grounds</tspan><tspan x="474" dy="30" class="zone-sub">camping glade · future wonders</tspan></text></g>
+
+            <g class="landmarks" aria-hidden="true">
+              <path class="pathway" d="M113 573Q188 500 133 419t95-120Q305 275 404 311t139 78q73 71 150 30"/>
+              <text x="102" y="534" transform="rotate(-52 102 534)">The Dark Walk</text>
+              <text x="142" y="309">The Promenade</text>
+              <g transform="translate(455 195)"><circle r="25"/><path d="M0 22V-21m0 9-14-13m14 19 15-14"/><text x="0" y="41">The Grove</text></g>
+              <g transform="translate(770 324)"><path d="M-23 18Q0-30 23 18Z"/><circle cy="-5" r="5"/><text x="0" y="38">Gothic Orchestra</text></g>
+              <g transform="translate(818 540)"><path d="M-25 13V-13Q0-32 25-13V13Z"/><circle cx="-12" cy="4" r="8"/><circle cx="14" cy="4" r="8"/><text x="0" y="36">Vardo</text></g>
+              <g transform="translate(215 170)"><path d="m-20 18 20-36 20 36M-12 4h24"/><text x="0" y="37">The Ærie</text></g>
+              <g class="tents" transform="translate(680 711)"><path d="m-55 15 19-30 19 30Zm55 0 19-30 19 30Zm55 0 19-30 19 30Z"/><text x="20" y="41">Camping Glade</text></g>
+              <g class="compass" transform="translate(920 698)"><circle r="43"/><path d="M0-38 9-8 38 0 9 8 0 38-9 8-38 0-9-8Z"/><text x="0" y="-49">N</text></g>
+            </g>
+            <path class="border-ornament" d="M25 31h950v758H25Z" aria-hidden="true"/>
+          </svg>
+        </div>
+
+        <aside class="map-detail" aria-live="polite" data-map-detail>
+          <p class="map-rune" aria-hidden="true">✦</p><p class="eyebrow dark" data-zone-kicker>Begin anywhere</p><h3 data-zone-title>The map is awake.</h3><p data-zone-copy>Choose a named region. The chart will reveal what lives there—and what might yet be made.</p><ul data-zone-list><li>Nine garden realms</li><li>Paths, follies, performances</li><li>A landscape still becoming</li></ul><p class="map-note">Conceptual locations and uses will evolve with the land.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="marvels section-shell" aria-labelledby="marvels-title">
+      <div class="section-heading"><p class="section-number">IV · Things found in the woods</p><p class="eyebrow dark">A living archive of play</p><h2 id="marvels-title">Follies, clearings<br>& curious devices.</h2></div>
+      <div class="marvel-list">
+        <article><span>01</span><h3>The Promenade</h3><p>A wandering woodland avenue where the garden reveals itself slowly.</p></article>
+        <article><span>02</span><h3>The Gothic Orchestra</h3><p>A strange ensemble in the trees: sound, sculpture, and nocturnal theatre.</p></article>
+        <article><span>03</span><h3>The Mushroom Grove</h3><p>A pocket of Fære devoted to scale, color, games, and improbable encounters.</p></article>
+        <article><span>04</span><h3>The Vardo</h3><p>A painted caravan and tiny chamber for stories, readings, and fortune.</p></article>
+        <article><span>05</span><h3>The Dark Walk</h3><p>A shadowed path for lantern light, listening, and a willing touch of mystery.</p></article>
+        <article><span>06</span><h3>The Chashitsu</h3><p>A small tea house where attention, quiet, and hospitality become the event.</p></article>
+      </div>
+    </section>
+
+    <section class="gather" id="gather" aria-labelledby="gather-title">
+      <div class="gather-copy"><p class="section-number">V · Gather here</p><p class="eyebrow">By invitation, by season</p><h2 id="gather-title">Not a park.<br>A stage for serendipity.</h2><p>Merveilles is imagined as a home for intimate gatherings shaped by the land: small enough to feel discovered, deliberate enough to be beautifully hosted.</p></div>
+      <div class="gather-grid"><article><p class="eyebrow">Nights</p><h3>Music & moonlight</h3><p>Acoustic performances, garden suppers, dances, salons, and lantern walks.</p></article><article><p class="eyebrow">Days</p><h3>Making & marvel</h3><p>Artist residencies, workshops, picniques, symposia, and forest practice.</p></article><article><p class="eyebrow">Stays</p><h3>Camping in the glade</h3><p>Small, reservation-only primitive camping connected to hosted events.</p></article></div>
+    </section>
+
+    <section class="begin" id="begin" aria-labelledby="begin-title"><p class="eyebrow">Begin here. With us.</p><h2 id="begin-title">Bring a vision.<br><em>Nest it in the grove.</em></h2><p>Artists, tinkerers, dancers, gardeners, builders, cooks, dreamers: Merveilles is a place to make beauty, mischief, and meaning with the forest.</p><a class="button" href="mailto:hello@merveilles.co?subject=I%20would%20like%20to%20help%20build%20Merveilles">Write to the garden</a></section>
+  </main>
+
+  <footer><a class="wordmark" href="#top"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 43V13M24 22c-6-1-10-5-11-11 6 1 10 5 11 11Zm0 8c7-1 12-5 14-12-7 1-12 5-14 12Z"/><circle cx="24" cy="8" r="3"/></svg><span>Merveilles</span></a><p>Pleasure Gardens · Colorado</p><p>All maps, uses, gatherings, and capacities are conceptual.</p></footer>
+  <script src="script.js"></script>
+</body>
+</html>

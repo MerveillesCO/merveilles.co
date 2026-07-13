@@ -1,0 +1,224 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "title": "The Merveilles Country",
+    "instructions": "To add a place, duplicate any Feature, give it a unique id, and change its name, coordinates, description, category, and links. Coordinates are [longitude, latitude].",
+    "bounds": { "west": -104.965, "south": 39.065, "east": -104.855, "north": 39.24 }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "renaissance-faire",
+      "geometry": { "type": "Point", "coordinates": [-104.900982, 39.229198] },
+      "properties": {
+        "name": "Renaissance Faire",
+        "subtitle": "The northern revels",
+        "category": "gathering",
+        "symbol": "banner",
+        "description": "The Colorado Renaissance Festival grounds in Larkspur—the northern threshold of this regional chart.",
+        "directions": "https://www.google.com/maps/search/?api=1&query=39.229198,-104.900982",
+        "source": "https://coloradorenaissance.com/",
+        "labelDx": 18,
+        "labelDy": 5
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "merveilles",
+      "geometry": { "type": "Point", "coordinates": [-104.884, 39.137] },
+      "properties": {
+        "name": "Merveilles",
+        "subtitle": "The garden of marvels",
+        "category": "garden",
+        "symbol": "star",
+        "description": "An intentionally approximate public marker for Merveilles Pleasure Gardens. Exact guest arrival directions remain private.",
+        "publicPrecision": "approximate",
+        "labelDx": 20,
+        "labelDy": -8
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "palmer-lake",
+      "geometry": { "type": "Point", "coordinates": [-104.911898, 39.123614] },
+      "properties": {
+        "name": "Palmer Lake",
+        "subtitle": "The waters between two realms",
+        "category": "water",
+        "symbol": "water",
+        "description": "The historic lake and town at the crest of the Palmer Divide, draining toward both the Platte and Arkansas watersheds.",
+        "directions": "https://www.google.com/maps/search/?api=1&query=39.123614,-104.911898",
+        "source": "https://www.townofpalmerlake.com/1311/About-Palmer-Lake",
+        "labelDx": 18,
+        "labelDy": 20
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "palmer-lake-troll",
+      "geometry": { "type": "Point", "coordinates": [-104.9146, 39.1197] },
+      "properties": {
+        "name": "Palmer Lake Troll",
+        "subtitle": "The metal legend beneath the bridge",
+        "category": "curiosity",
+        "symbol": "troll",
+        "description": "Palmer Lake’s community-built metal troll, unveiled in June 2026. The marker is approximate pending a surveyed public coordinate.",
+        "directions": "https://www.google.com/maps/search/?api=1&query=Palmer+Lake+Troll+Colorado",
+        "source": "https://www.townofpalmerlake.com/m/newsflash/home/detail/20",
+        "publicPrecision": "approximate",
+        "labelDx": 18,
+        "labelDy": 35
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "elephant-rock",
+      "geometry": { "type": "Point", "coordinates": [-104.890833, 39.118611] },
+      "properties": {
+        "name": "Elephant Rock",
+        "subtitle": "The eastern stone",
+        "category": "landform",
+        "symbol": "rock",
+        "description": "A distinctive sandstone summit and arch east of Palmer Lake, recorded in the USGS place-name data.",
+        "directions": "https://www.google.com/maps/search/?api=1&query=39.118611,-104.890833",
+        "source": "https://topoquest.com/place/colorado/arch/elephant-rock-arch/1678977",
+        "labelDx": 18,
+        "labelDy": 8
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "chautauqua",
+      "geometry": { "type": "Point", "coordinates": [-104.9195, 39.1185] },
+      "properties": {
+        "name": "The Chautauqua",
+        "subtitle": "Glen Park’s tent university",
+        "category": "history",
+        "symbol": "book",
+        "description": "The historic Chautauqua grounds around Glen Park and Chautauqua Avenue, where summer lectures, music, walks, and tent lodging once gathered visitors.",
+        "directions": "https://www.google.com/maps/search/?api=1&query=Glen+Park+Palmer+Lake+Colorado",
+        "source": "https://palmerdividehistory.org/chautauqua-assembly/",
+        "publicPrecision": "district",
+        "labelDx": -18,
+        "labelDy": 40,
+        "labelAnchor": "end"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ice-cave",
+      "geometry": { "type": "Point", "coordinates": [-104.933593, 39.116381] },
+      "properties": {
+        "name": "Ice Cave Creek",
+        "subtitle": "The hidden cold passage",
+        "category": "trail",
+        "symbol": "cave",
+        "description": "A steep forested trail system west of Palmer Lake following Ice Cave Creek toward the Rampart Range wildlands.",
+        "directions": "https://www.google.com/maps/search/?api=1&query=39.119288,-104.911238",
+        "source": "https://www.topozone.com/colorado/el-paso-co/stream/ice-cave-creek/",
+        "labelDx": -18,
+        "labelDy": -12,
+        "labelAnchor": "end"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "chautauqua-mountain",
+      "geometry": { "type": "Point", "coordinates": [-104.930260, 39.112770] },
+      "properties": {
+        "name": "Chautauqua Mountain",
+        "subtitle": "The western overlook",
+        "category": "peak",
+        "symbol": "mountain",
+        "description": "A wooded summit above Palmer Lake and the historic Chautauqua grounds.",
+        "directions": "https://www.google.com/maps/search/?api=1&query=39.112770,-104.930260",
+        "source": "https://www.openstreetmap.org/?mlat=39.112770&mlon=-104.930260#map=15/39.112770/-104.930260",
+        "labelDx": -18,
+        "labelDy": 22,
+        "labelAnchor": "end"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "balanced-rock",
+      "geometry": { "type": "Point", "coordinates": [-104.9469, 39.0936] },
+      "properties": {
+        "name": "Balanced Rock",
+        "subtitle": "The western stone",
+        "category": "landform",
+        "symbol": "rock",
+        "description": "The Balanced Rock trail country west of Palmer Lake, shown here at the named USGS trail feature.",
+        "directions": "https://www.google.com/maps/search/?api=1&query=39.0936,-104.9469",
+        "source": "https://topoquest.com/place/colorado/arch/elephant-rock-arch/1678977",
+        "labelDx": 18,
+        "labelDy": 8
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "raspberry-mountain",
+      "geometry": { "type": "Point", "coordinates": [-104.927760, 39.091936] },
+      "properties": {
+        "name": "Raspberry Mountain",
+        "subtitle": "The berry-crowned height",
+        "category": "peak",
+        "symbol": "mountain",
+        "description": "A Rampart Range summit west of Monument, near the Raspberry Mountain trail network.",
+        "directions": "https://www.google.com/maps/search/?api=1&query=39.091936,-104.927760",
+        "source": "https://www.openstreetmap.org/?mlat=39.091936&mlon=-104.927760#map=15/39.091936/-104.927760",
+        "labelDx": 18,
+        "labelDy": 22
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "monument-rock",
+      "geometry": { "type": "Point", "coordinates": [-104.904426, 39.088048] },
+      "properties": {
+        "name": "Monument Rock",
+        "subtitle": "The southern sentinel",
+        "category": "landform",
+        "symbol": "rock",
+        "description": "The named sandstone summit west of Monument, listed on the USGS Palmer Lake quadrangle.",
+        "directions": "https://www.google.com/maps/search/?api=1&query=39.088048,-104.904426",
+        "source": "https://www.topozone.com/colorado/el-paso-co/summit/monument-rock/",
+        "labelDx": 18,
+        "labelDy": 8
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "mount-herman",
+      "geometry": { "type": "Point", "coordinates": [-104.926285, 39.081831] },
+      "properties": {
+        "name": "Mount Herman",
+        "subtitle": "The high southern watch",
+        "category": "peak",
+        "symbol": "mountain",
+        "description": "The prominent Rampart Range summit overlooking Monument and the Palmer Divide.",
+        "directions": "https://www.google.com/maps/search/?api=1&query=39.081831,-104.926285",
+        "source": "https://www.openstreetmap.org/?mlat=39.081831&mlon=-104.926285#map=15/39.081831/-104.926285",
+        "labelDx": -18,
+        "labelDy": 24,
+        "labelAnchor": "end"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "harrison-crash-route",
+      "geometry": { "type": "Point", "coordinates": [-104.954, 39.101] },
+      "properties": {
+        "name": "Harrison Crash Trail",
+        "subtitle": "A mountain memorial",
+        "category": "history",
+        "symbol": "memorial",
+        "description": "A general map marker for the long Ice Cave Creek route to Captain Sidney Harrison’s 1952 crash site. It is deliberately not presented as a navigation coordinate; visitors should use a current official trail map and respect the wreckage.",
+        "directions": "https://www.hikingproject.com/trail/7032321/harrison-crash-site-via-ice-cave",
+        "source": "https://www.hikingproject.com/trail/7032321/harrison-crash-site-via-ice-cave",
+        "publicPrecision": "route-only",
+        "labelDx": 18,
+        "labelDy": -12
+      }
+    }
+  ]
+}
