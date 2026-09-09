@@ -65,6 +65,15 @@ def main() -> None:
     facilities.loc[facilities["name"] == "Garage toilet", "geometry"] = [
         Point(b[0] + (9 * 25), b[3] - (8 * 25))
     ]
+    facilities["orientation_note"] = ""
+    # Owner-identified garden installation centered in R13.
+    facilities.loc[len(facilities)] = {
+        "name": "Gothic Orchestra", "feature_type": "garden_feature",
+        "status": "Owner-identified",
+        "orientation_note": "Perpendicular to the winter-solstice sun",
+        "geometry": Point(b[0] + (17.5 * 25), b[3] - (12.5 * 25)),
+    }
+    facilities = facilities.set_crs(CRS, allow_override=True)
 
     # The communal table is west of the house, extending north-south for 20 feet.
     # Centered in reference cell J10 (25-foot grid), west of the house.
@@ -215,18 +224,24 @@ def make_exhibit(parcel, grid, facilities, table, stage, fence, gate, distances)
         ax.annotate(str(row + 1), (mx, my), xytext=(4, 0), textcoords="offset points",
                     ha="left", va="center", color="white", fontsize=7, weight="bold", zorder=12)
 
-    colors = {"campsite": "#ff7900", "sanitation": "#075be8", "structure": "#ffffff"}
+    colors = {"campsite": "#ff7900", "sanitation": "#075be8",
+              "structure": "#ffffff", "garden_feature": "#d7a83d"}
+    markers = {"garden_feature": "D"}
     for kind, subset in facilities_m.groupby("feature_type"):
         subset.plot(ax=ax, color=colors[kind], edgecolor="black", linewidth=1.0,
+                    marker=markers.get(kind, "o"),
                     markersize=95 if kind != "structure" else 45, zorder=9)
         for _, f in subset.iterrows():
             if kind == "structure":
                 offset = (7, 5)
+            elif kind == "garden_feature":
+                offset = (-175, 7)
             elif f["name"] == "Garage toilet":
                 offset = (-82, 7)
             else:
                 offset = (7, 7)
-            ax.annotate(f["name"], (f.geometry.x, f.geometry.y), xytext=offset,
+            label = f["name"]
+            ax.annotate(label, (f.geometry.x, f.geometry.y), xytext=offset,
                         textcoords="offset points", color="white", fontsize=8.5, weight="bold",
                         bbox=dict(boxstyle="round,pad=.2", facecolor="black", alpha=.67, edgecolor="none"), zorder=10)
 
@@ -278,6 +293,7 @@ def make_exhibit(parcel, grid, facilities, table, stage, fence, gate, distances)
              "Parking capacity: up to 20 vehicles\n"
              "Communal table: 20 ft, oriented N-S\n\n"
              "Stage: 12 x 4 ft, oriented E-W\n\n"
+             "Garden feature: Gothic Orchestra at R13; perpendicular to the winter-solstice sun\n\n"
              "All proposed-use locations are conceptual and subject to field verification. "
              "The 25-foot grid is a square location-reference grid, not survey coordinates.\n\n"
              "Parcel source: El Paso County GIS Open Data, parcel 7103005001.\n"
@@ -292,6 +308,8 @@ def make_exhibit(parcel, grid, facilities, table, stage, fence, gate, distances)
               Line2D([0], [0], marker="o", color="none", markerfacecolor="#075be8", markeredgecolor="black", markersize=9, label="Portable toilet"),
               Line2D([0], [0], color="#ffe45c", lw=5, label="Communal table"),
               Patch(facecolor="#d86cff", edgecolor="black", label="12 x 4 ft stage"),
+              Line2D([0], [0], marker="D", color="none", markerfacecolor="#d7a83d",
+                     markeredgecolor="black", markersize=7, label="Gothic Orchestra"),
               Line2D([0], [0], color="black", lw=3.4, linestyle=(0, (2, 2)),
                      marker="|", markerfacecolor="white", label="Existing white picket fence"),
               Line2D([0], [0], marker="s", color="none", markerfacecolor="#fff7d6",

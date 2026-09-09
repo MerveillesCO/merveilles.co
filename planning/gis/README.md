@@ -13,7 +13,8 @@ Merveilles Club pre-application site plan at 21085 Capella Drive.
   the publicly displayed 2024 CSU orthophoto. Parked vehicles were removed from
   the driveway; it is not an untouched evidentiary photograph.
 - `data/merveilles-club-concept.gpkg` — editable GeoPackage containing parcel,
-  25-foot square reference grid, facilities, communal table, stage, and measured
+  25-foot square reference grid, facilities, communal table, stage, Gothic
+  Orchestra garden feature, and measured
   sanitation-distance layers, plus the owner-identified existing white picket fence
   and driveway gate.
 - `exports/merveilles-club-conceptual-site-plan.{jpg,pdf}` — print-ready exhibits.
