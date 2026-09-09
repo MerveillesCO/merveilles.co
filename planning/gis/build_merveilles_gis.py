@@ -61,6 +61,10 @@ def main() -> None:
         [{"name": n, "feature_type": t, "status": "Preliminary", "geometry": Point(*parcel_xy(u, v, b))}
          for n, t, u, v in point_specs], crs=CRS,
     )
+    # Exact owner-specified grid location: southwest corner of J8.
+    facilities.loc[facilities["name"] == "Garage toilet", "geometry"] = [
+        Point(b[0] + (9 * 25), b[3] - (8 * 25))
+    ]
 
     # The communal table is west of the house, extending north-south for 20 feet.
     # Centered in reference cell J10 (25-foot grid), west of the house.
@@ -71,39 +75,39 @@ def main() -> None:
           "status": "Preliminary", "geometry": LineString([(tx, ty - 10), (tx, ty + 10)])}], crs=CRS,
     )
 
-    # Conceptual parking court; capacity is operational, not a striped-space count.
-    parking_ring = [parcel_xy(u, v, b) for u, v in
-                    [(.34, .40), (.63, .40), (.64, .56), (.50, .58), (.45, .52), (.34, .52)]]
-    parking = gpd.GeoDataFrame(
-        [{"name": "Existing driveway / parking area", "capacity": "Up to 20 vehicles",
-          "status": "Conceptual", "geometry": Polygon(parking_ring)}], crs=CRS,
+    # Owner-identified 12-by-4-foot stage centered at the K/L and 13/14 grid
+    # intersection, with its long side oriented east-west.
+    stage_x = b[0] + (11 * 25)
+    stage_y = b[3] - (13 * 25)
+    stage = gpd.GeoDataFrame(
+        [{"name": "12 x 4 ft stage", "length_ft": 12, "width_ft": 4,
+          "orientation": "E-W", "status": "Owner-identified",
+          "geometry": box(stage_x - 6, stage_y - 2, stage_x + 6, stage_y + 2)}], crs=CRS,
     )
 
-    # Owner-identified existing white picket fence. From the west parcel edge it
-    # follows the 6/7 line to J/K, steps north to the 4/5 line, runs east to the
-    # middle of O, then returns south to the 6/7 line. A 12-foot opening marks
-    # the driveway gate on the J/K segment.
+    # Owner-identified existing white picket fence. From the southwest corner it
+    # runs north along the west edge to the 6/7 line, east to J/K, north to the
+    # 4/5 line, east to the middle of O, and south back to the southern fence.
+    # The southern run connects mid-O back to the southwest corner. A 12-foot
+    # opening at mid-O on the 7/8 line marks the driveway gate.
     y_67 = b[3] - (6 * 25)
     y_45 = b[3] - (4 * 25)
     x_jk = b[0] + (10 * 25)
     x_mid_o = b[0] + (14.5 * 25)
-    gate_y = (y_45 + y_67) / 2
+    gate_y = b[3] - (7 * 25)
     gate_half_width = 6
     fence = gpd.GeoDataFrame(
-        [
-            {"name": "Existing white picket fence", "segment": "west and south",
-             "status": "Owner-identified",
-             "geometry": LineString([(b[0], b[3]), (b[0], y_67), (x_jk, y_67),
-                                     (x_jk, gate_y - gate_half_width)])},
-            {"name": "Existing white picket fence", "segment": "north and east",
-             "status": "Owner-identified",
-             "geometry": LineString([(x_jk, gate_y + gate_half_width), (x_jk, y_45),
-                                     (x_mid_o, y_45), (x_mid_o, y_67)])},
-        ], crs=CRS,
+        [{"name": "Existing white picket fence", "segment": "perimeter excluding driveway gate",
+          "status": "Owner-identified",
+          "geometry": LineString([
+              (x_mid_o, gate_y - gate_half_width), (x_mid_o, b[1]),
+              (b[0], b[1]), (b[0], y_67), (x_jk, y_67), (x_jk, y_45),
+              (x_mid_o, y_45), (x_mid_o, gate_y + gate_half_width),
+          ])}], crs=CRS,
     )
     gate = gpd.GeoDataFrame(
         [{"name": "Driveway gate", "status": "Owner-identified",
-          "geometry": Point(x_jk, gate_y)}], crs=CRS,
+          "geometry": Point(x_mid_o, gate_y)}], crs=CRS,
     )
 
     # Twenty-five-foot square reference grid. It produces A-Z across the parcel;
@@ -137,12 +141,12 @@ def main() -> None:
     if gpkg.exists():
         gpkg.unlink()
     for name, layer in [("parcel", parcel), ("reference_grid_25ft", grid), ("facilities", facilities),
-                        ("communal_table", table), ("parking", parking), ("existing_fence", fence),
+                        ("communal_table", table), ("stage", stage), ("existing_fence", fence),
                         ("existing_gate", gate),
                         ("sanitation_distances", distances)]:
         layer.to_file(gpkg, layer=name, driver="GPKG")
 
-    make_exhibit(parcel, grid, facilities, table, parking, fence, gate, distances)
+    make_exhibit(parcel, grid, facilities, table, stage, fence, gate, distances)
 
 
 def load_basemap():
@@ -178,25 +182,25 @@ def load_basemap():
         return naip, rb, raster_crs, "USDA NAIP via USGS National Map ImageServer"
 
 
-def make_exhibit(parcel, grid, facilities, table, parking, fence, gate, distances) -> None:
+def make_exhibit(parcel, grid, facilities, table, stage, fence, gate, distances) -> None:
     rgb, rb, raster_crs, imagery_source = load_basemap()
 
     to_map = Transformer.from_crs(CRS, raster_crs, always_xy=True)
-    layers = [x.to_crs(raster_crs) for x in (parcel, grid, facilities, table, parking, fence, gate, distances)]
-    parcel_m, grid_m, facilities_m, table_m, parking_m, fence_m, gate_m, distances_m = layers
+    layers = [x.to_crs(raster_crs) for x in (parcel, grid, facilities, table, stage, fence, gate, distances)]
+    parcel_m, grid_m, facilities_m, table_m, stage_m, fence_m, gate_m, distances_m = layers
 
     fig = plt.figure(figsize=(17, 11), facecolor="white")
     ax = fig.add_axes([.035, .12, .74, .80])
     ax.imshow(rgb, extent=[rb.left, rb.right, rb.bottom, rb.top])
     grid_m.boundary.plot(ax=ax, color="white", linewidth=.35, alpha=.55, zorder=3)
     parcel_m.boundary.plot(ax=ax, color="#36ed46", linewidth=2.8, zorder=5)
-    parking_m.boundary.plot(ax=ax, color="#8bd7f2", linewidth=1.3, linestyle=":", alpha=.9, zorder=4)
     fence_m.plot(ax=ax, color="black", linewidth=3.4, alpha=.70, zorder=6)
     fence_m.plot(ax=ax, color="white", linewidth=1.7, linestyle=(0, (2, 2)), zorder=7)
     gate_m.plot(ax=ax, marker="s", facecolor="#fff7d6", edgecolor="black",
                 linewidth=1.0, markersize=48, zorder=9)
     distances_m.plot(ax=ax, color="#00e9ff", linewidth=1.4, linestyle="--", zorder=6)
     table_m.plot(ax=ax, color="#ffe45c", linewidth=6, zorder=8)
+    stage_m.plot(ax=ax, facecolor="#d86cff", edgecolor="black", linewidth=1.2, zorder=8)
 
     # Coordinate labels follow the same 25-foot square grid used in the GeoPackage.
     minx, miny, maxx, maxy = parcel.geometry.iloc[0].bounds
@@ -236,13 +240,18 @@ def make_exhibit(parcel, grid, facilities, table, parking, fence, gate, distance
                 color="#ffe45c", fontsize=8.5, weight="bold",
                 bbox=dict(facecolor="black", alpha=.68, edgecolor="none", pad=2), zorder=10)
 
+    stage_point = stage_m.geometry.iloc[0].centroid
+    ax.annotate("12 x 4 ft stage", (stage_point.x, stage_point.y), xytext=(7, -10),
+                textcoords="offset points", color="#f5c8ff", fontsize=8, weight="bold",
+                bbox=dict(facecolor="black", alpha=.68, edgecolor="none", pad=1.5), zorder=10)
+
     gate_point = gate_m.geometry.iloc[0]
     ax.annotate("Driveway gate", (gate_point.x, gate_point.y), xytext=(8, -13),
                 textcoords="offset points", color="white", fontsize=8, weight="bold",
                 bbox=dict(facecolor="black", alpha=.68, edgecolor="none", pad=1.5), zorder=10)
 
     # Address label is deliberately placed in the open southern portion, off the house.
-    lx, ly = to_map.transform(*parcel_xy(.55, .88, parcel.geometry.iloc[0].bounds))
+    lx, ly = to_map.transform(*parcel_xy(.76, .83, parcel.geometry.iloc[0].bounds))
     ax.annotate("MERVEILLES CLUB\nParcel 7103005001  |  21085 Capella Dr\nRR-5  |  5.01 acres",
                 (lx, ly), ha="center", va="center", color="white", fontsize=10, weight="bold",
                 bbox=dict(boxstyle="round,pad=.45", facecolor="#15231a", alpha=.82,
@@ -268,6 +277,7 @@ def make_exhibit(parcel, grid, facilities, table, parking, fence, gate, distance
              "Primitive campsites: 3\n"
              "Parking capacity: up to 20 vehicles\n"
              "Communal table: 20 ft, oriented N-S\n\n"
+             "Stage: 12 x 4 ft, oriented E-W\n\n"
              "All proposed-use locations are conceptual and subject to field verification. "
              "The 25-foot grid is a square location-reference grid, not survey coordinates.\n\n"
              "Parcel source: El Paso County GIS Open Data, parcel 7103005001.\n"
@@ -281,7 +291,7 @@ def make_exhibit(parcel, grid, facilities, table, parking, fence, gate, distance
               Line2D([0], [0], marker="o", color="none", markerfacecolor="#ff7900", markeredgecolor="black", markersize=9, label="Proposed campsite"),
               Line2D([0], [0], marker="o", color="none", markerfacecolor="#075be8", markeredgecolor="black", markersize=9, label="Portable toilet"),
               Line2D([0], [0], color="#ffe45c", lw=5, label="Communal table"),
-              Line2D([0], [0], color="#8bd7f2", lw=1.5, linestyle=":", label="Parking / driveway outline"),
+              Patch(facecolor="#d86cff", edgecolor="black", label="12 x 4 ft stage"),
               Line2D([0], [0], color="black", lw=3.4, linestyle=(0, (2, 2)),
                      marker="|", markerfacecolor="white", label="Existing white picket fence"),
               Line2D([0], [0], marker="s", color="none", markerfacecolor="#fff7d6",
