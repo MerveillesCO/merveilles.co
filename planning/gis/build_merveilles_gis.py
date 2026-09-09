@@ -52,7 +52,7 @@ def main() -> None:
         ("Campsite 1", "campsite", .79, .22),
         ("Campsite 2", "campsite", .82, .53),
         ("Campsite 3", "campsite", .245, .345),
-        ("Barn toilet", "sanitation", .53, .24),
+        ("Barn toilet", "sanitation", .53, .275),
         ("Garage toilet", "sanitation", .34, .52),
         ("Barn", "structure", .53, .32),
         ("House", "structure", .42, .66),
@@ -65,7 +65,7 @@ def main() -> None:
     # The communal table is west of the house, extending north-south for 20 feet.
     # Centered in reference cell J10 (25-foot grid), west of the house.
     tx = b[0] + (9.5 * 25)
-    ty = b[3] - (9.5 * 25)
+    ty = b[3] - (9.5 * 25) - 8  # shift toward the south edge of J10
     table = gpd.GeoDataFrame(
         [{"name": "20-foot communal table", "length_ft": 20, "orientation": "N-S",
           "status": "Preliminary", "geometry": LineString([(tx, ty - 10), (tx, ty + 10)])}], crs=CRS,
@@ -77,6 +77,33 @@ def main() -> None:
     parking = gpd.GeoDataFrame(
         [{"name": "Existing driveway / parking area", "capacity": "Up to 20 vehicles",
           "status": "Conceptual", "geometry": Polygon(parking_ring)}], crs=CRS,
+    )
+
+    # Owner-identified existing white picket fence. From the west parcel edge it
+    # follows the 6/7 line to J/K, steps north to the 4/5 line, runs east to the
+    # middle of O, then returns south to the 6/7 line. A 12-foot opening marks
+    # the driveway gate on the J/K segment.
+    y_67 = b[3] - (6 * 25)
+    y_45 = b[3] - (4 * 25)
+    x_jk = b[0] + (10 * 25)
+    x_mid_o = b[0] + (14.5 * 25)
+    gate_y = (y_45 + y_67) / 2
+    gate_half_width = 6
+    fence = gpd.GeoDataFrame(
+        [
+            {"name": "Existing white picket fence", "segment": "west and south",
+             "status": "Owner-identified",
+             "geometry": LineString([(b[0], b[3]), (b[0], y_67), (x_jk, y_67),
+                                     (x_jk, gate_y - gate_half_width)])},
+            {"name": "Existing white picket fence", "segment": "north and east",
+             "status": "Owner-identified",
+             "geometry": LineString([(x_jk, gate_y + gate_half_width), (x_jk, y_45),
+                                     (x_mid_o, y_45), (x_mid_o, y_67)])},
+        ], crs=CRS,
+    )
+    gate = gpd.GeoDataFrame(
+        [{"name": "Driveway gate", "status": "Owner-identified",
+          "geometry": Point(x_jk, gate_y)}], crs=CRS,
     )
 
     # Twenty-five-foot square reference grid. It produces A-Z across the parcel;
@@ -94,15 +121,15 @@ def main() -> None:
                                   "row": row + 1, "cell_size_ft": cell, "geometry": geom})
     grid = gpd.GeoDataFrame(grid_rows, crs=CRS)
 
-    # Measured straight-line links from the nearest sanitation point to each camp.
+    # Operational sanitation assignments. All campsites use the barn toilet;
+    # the garage toilet serves the house/feast area rather than camping.
     toilets = facilities[facilities.feature_type == "sanitation"]
     camps = facilities[facilities.feature_type == "campsite"]
+    barn_toilet = toilets[toilets["name"] == "Barn toilet"].iloc[0]
     distance_rows = []
     for _, camp in camps.iterrows():
-        nearest_idx = toilets.geometry.distance(camp.geometry).idxmin()
-        toilet = toilets.loc[nearest_idx]
-        line = LineString([toilet.geometry, camp.geometry])
-        distance_rows.append({"from_name": toilet["name"], "to_name": camp["name"],
+        line = LineString([barn_toilet.geometry, camp.geometry])
+        distance_rows.append({"from_name": barn_toilet["name"], "to_name": camp["name"],
                               "distance_ft": round(line.length, 1), "geometry": line})
     distances = gpd.GeoDataFrame(distance_rows, crs=CRS)
 
@@ -110,10 +137,12 @@ def main() -> None:
     if gpkg.exists():
         gpkg.unlink()
     for name, layer in [("parcel", parcel), ("reference_grid_25ft", grid), ("facilities", facilities),
-                        ("communal_table", table), ("parking", parking), ("sanitation_distances", distances)]:
+                        ("communal_table", table), ("parking", parking), ("existing_fence", fence),
+                        ("existing_gate", gate),
+                        ("sanitation_distances", distances)]:
         layer.to_file(gpkg, layer=name, driver="GPKG")
 
-    make_exhibit(parcel, grid, facilities, table, parking, distances)
+    make_exhibit(parcel, grid, facilities, table, parking, fence, gate, distances)
 
 
 def load_basemap():
@@ -123,6 +152,12 @@ def load_basemap():
         rb = src.bounds
         raster_crs = src.crs
         naip = np.moveaxis(src.read([1, 2, 3]), 0, -1)
+
+    presentation_path = DATA / "csu-2024-presentation-retouched.webp"
+    if presentation_path.exists():
+        presentation = np.asarray(Image.open(presentation_path).convert("RGB"))
+        return (presentation, rb, raster_crs,
+                "Colorado Springs Utilities 2024 El Paso County orthophoto; parked vehicles retouched")
 
     try:
         cfg_url = ("https://maps.csu.org/Geocortex/Essentials/REST/sites/"
@@ -143,19 +178,23 @@ def load_basemap():
         return naip, rb, raster_crs, "USDA NAIP via USGS National Map ImageServer"
 
 
-def make_exhibit(parcel, grid, facilities, table, parking, distances) -> None:
+def make_exhibit(parcel, grid, facilities, table, parking, fence, gate, distances) -> None:
     rgb, rb, raster_crs, imagery_source = load_basemap()
 
     to_map = Transformer.from_crs(CRS, raster_crs, always_xy=True)
-    layers = [x.to_crs(raster_crs) for x in (parcel, grid, facilities, table, parking, distances)]
-    parcel_m, grid_m, facilities_m, table_m, parking_m, distances_m = layers
+    layers = [x.to_crs(raster_crs) for x in (parcel, grid, facilities, table, parking, fence, gate, distances)]
+    parcel_m, grid_m, facilities_m, table_m, parking_m, fence_m, gate_m, distances_m = layers
 
     fig = plt.figure(figsize=(17, 11), facecolor="white")
     ax = fig.add_axes([.035, .12, .74, .80])
     ax.imshow(rgb, extent=[rb.left, rb.right, rb.bottom, rb.top])
     grid_m.boundary.plot(ax=ax, color="white", linewidth=.35, alpha=.55, zorder=3)
     parcel_m.boundary.plot(ax=ax, color="#36ed46", linewidth=2.8, zorder=5)
-    parking_m.plot(ax=ax, facecolor="#28a9e0", edgecolor="white", alpha=.20, linewidth=1.2, zorder=4)
+    parking_m.boundary.plot(ax=ax, color="#8bd7f2", linewidth=1.3, linestyle=":", alpha=.9, zorder=4)
+    fence_m.plot(ax=ax, color="black", linewidth=3.4, alpha=.70, zorder=6)
+    fence_m.plot(ax=ax, color="white", linewidth=1.7, linestyle=(0, (2, 2)), zorder=7)
+    gate_m.plot(ax=ax, marker="s", facecolor="#fff7d6", edgecolor="black",
+                linewidth=1.0, markersize=48, zorder=9)
     distances_m.plot(ax=ax, color="#00e9ff", linewidth=1.4, linestyle="--", zorder=6)
     table_m.plot(ax=ax, color="#ffe45c", linewidth=6, zorder=8)
 
@@ -197,6 +236,11 @@ def make_exhibit(parcel, grid, facilities, table, parking, distances) -> None:
                 color="#ffe45c", fontsize=8.5, weight="bold",
                 bbox=dict(facecolor="black", alpha=.68, edgecolor="none", pad=2), zorder=10)
 
+    gate_point = gate_m.geometry.iloc[0]
+    ax.annotate("Driveway gate", (gate_point.x, gate_point.y), xytext=(8, -13),
+                textcoords="offset points", color="white", fontsize=8, weight="bold",
+                bbox=dict(facecolor="black", alpha=.68, edgecolor="none", pad=1.5), zorder=10)
+
     # Address label is deliberately placed in the open southern portion, off the house.
     lx, ly = to_map.transform(*parcel_xy(.55, .88, parcel.geometry.iloc[0].bounds))
     ax.annotate("MERVEILLES CLUB\nParcel 7103005001  |  21085 Capella Dr\nRR-5  |  5.01 acres",
@@ -228,20 +272,30 @@ def make_exhibit(parcel, grid, facilities, table, parking, distances) -> None:
              "The 25-foot grid is a square location-reference grid, not survey coordinates.\n\n"
              "Parcel source: El Paso County GIS Open Data, parcel 7103005001.\n"
              f"Imagery source: {imagery_source}.\n"
-             "Coordinate system: NAD83 / Colorado Central (ftUS), EPSG:2232.\n\n"
+             "Coordinate system: NAD83 / Colorado Central (ftUS), EPSG:2232.\n"
+             "Presentation basemap is photographically retouched only to remove parked vehicles.\n"
+             "Gas and electric alignments: field locate pending; no line locations inferred.\n\n"
              "NOT A SURVEY")
     side.text(0, .94, notes, va="top", fontsize=9.5, linespacing=1.35, wrap=True)
     legend = [Patch(facecolor="none", edgecolor="#36ed46", linewidth=2.5, label="Parcel boundary"),
               Line2D([0], [0], marker="o", color="none", markerfacecolor="#ff7900", markeredgecolor="black", markersize=9, label="Proposed campsite"),
               Line2D([0], [0], marker="o", color="none", markerfacecolor="#075be8", markeredgecolor="black", markersize=9, label="Portable toilet"),
               Line2D([0], [0], color="#ffe45c", lw=5, label="Communal table"),
-              Patch(facecolor="#28a9e0", edgecolor="white", alpha=.4, label="Parking / driveway")]
+              Line2D([0], [0], color="#8bd7f2", lw=1.5, linestyle=":", label="Parking / driveway outline"),
+              Line2D([0], [0], color="black", lw=3.4, linestyle=(0, (2, 2)),
+                     marker="|", markerfacecolor="white", label="Existing white picket fence"),
+              Line2D([0], [0], marker="s", color="none", markerfacecolor="#fff7d6",
+                     markeredgecolor="black", markersize=7, label="Driveway gate")]
     side.legend(handles=legend, loc="lower left", frameon=False, fontsize=9)
     fig.text(.035, .055, "Prepared for zoning-verification / pre-application discussion • Conceptual planning exhibit • 9 September 2026",
              fontsize=9, color="#333333")
-    fig.savefig(EXPORTS / "merveilles-club-conceptual-site-plan.png", dpi=300, bbox_inches="tight")
-    fig.savefig(EXPORTS / "merveilles-club-conceptual-site-plan.pdf", dpi=300, bbox_inches="tight")
+    jpg_path = EXPORTS / "merveilles-club-conceptual-site-plan.jpg"
+    pdf_path = EXPORTS / "merveilles-club-conceptual-site-plan.pdf"
+    fig.savefig(jpg_path, dpi=180, bbox_inches="tight",
+                pil_kwargs={"quality": 70, "optimize": True})
     plt.close(fig)
+    with Image.open(jpg_path) as flattened:
+        flattened.convert("RGB").save(pdf_path, "PDF", resolution=180, quality=70)
 
 
 if __name__ == "__main__":
