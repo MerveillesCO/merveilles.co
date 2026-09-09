@@ -7,11 +7,15 @@ walk-in campground.
 
 ## Provisional envelope
 
-- Up to eight party tent plots
-- Up to 18–20 overnight guests
+- Three reservable tent sites in the initial phase
+- Site 3 may accommodate a larger party, subject to its approved capacity
 - Known guest and vehicle manifest
 - Quiet hours and an on-duty camp steward
 - No individual fires unless specifically approved
+
+The initial demand model assumes all three sites are booked for Friday and
+Saturday nights during the eight Colorado Renaissance Festival weekends. Other
+operating dates and final guest capacity remain subject to approval.
 
 These numbers are planning assumptions only. The lawful capacity is the lowest
 limit established by land use, fire access and separation, sanitation, potable
@@ -25,4 +29,3 @@ water, parking, insurance, and other applicable requirements.
 - Weather cancellation and severe-weather refuge
 - Check-in, quiet hours, security, and morning departure
 - Future furnished tents or other lodging, if approvals support them
-
