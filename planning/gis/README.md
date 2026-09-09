@@ -7,8 +7,8 @@ Merveilles Club pre-application site plan at 21085 Capella Drive.
 
 - `data/parcel-7103005001.geojson` — authoritative parcel polygon retrieved from
   the El Paso County GIS Open Data parcel service.
-- `data/naip-parcel-7103005001.tif` — georeferenced USDA NAIP orthophoto retrieved
-  through the USGS National Map ImageServer.
+- `data/naip-parcel-7103005001.tif` — georeferenced public-domain USDA NAIP
+  orthophoto used as an offline fallback.
 - `data/merveilles-club-concept.gpkg` — editable GeoPackage containing parcel,
   25-foot square reference grid, facilities, communal table, parking, and measured
   sanitation-distance layers.
@@ -29,6 +29,11 @@ Install `geopandas`, `rasterio`, `pyproj`, `shapely`, `matplotlib`, and `numpy`,
 python planning/gis/build_merveilles_gis.py
 ```
 
+The build requests the publicly displayed 2024 El Paso County orthophoto from
+Colorado Springs Utilities for the presentation exports and automatically falls
+back to the local NAIP GeoTIFF if that service is unavailable. The County's raw
+licensed aerial-delivery tile is not redistributed here.
+
 QGIS can open `data/merveilles-club-concept.gpkg` directly and add the GeoTIFF as
-the basemap. The GeoPackage is the editable source of truth; the PNG and PDF are
-presentation exports.
+an offline basemap. The GeoPackage is the editable source of truth; the PNG and
+PDF are presentation exports.

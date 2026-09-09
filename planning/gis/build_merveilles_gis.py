@@ -8,12 +8,15 @@ US survey feet). Proposed-use features are conceptual and must be field verified
 from __future__ import annotations
 
 import json
+from io import BytesIO
 from pathlib import Path
 
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import numpy as np
 import rasterio
+import requests
+from PIL import Image
 from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
 from pyproj import Transformer
@@ -113,12 +116,35 @@ def main() -> None:
     make_exhibit(parcel, grid, facilities, table, parking, distances)
 
 
-def make_exhibit(parcel, grid, facilities, table, parking, distances) -> None:
+def load_basemap():
+    """Load CSU's public 2024 ortho display, falling back to local public-domain NAIP."""
     raster_path = DATA / "naip-parcel-7103005001.tif"
     with rasterio.open(raster_path) as src:
-        rgb = np.moveaxis(src.read([1, 2, 3]), 0, -1)
         rb = src.bounds
         raster_crs = src.crs
+        naip = np.moveaxis(src.read([1, 2, 3]), 0, -1)
+
+    try:
+        cfg_url = ("https://maps.csu.org/Geocortex/Essentials/REST/sites/"
+                   "GIS_Public_Portal/map/mapservices/10?f=json")
+        cfg = requests.get(cfg_url, timeout=30).json()
+        parts = dict(item.split("=", 1) for item in cfg["connectionString"].split(";") if "=" in item)
+        params = {
+            "bbox": f"{rb.left},{rb.bottom},{rb.right},{rb.top}", "bboxSR": "3857",
+            "imageSR": "3857", "size": "4096,2560", "format": "png32",
+            "transparent": "false", "layers": "show:0", "f": "image", "token": parts["token"],
+        }
+        response = requests.get(parts["url"] + "/export", params=params, timeout=120)
+        response.raise_for_status()
+        high_res = np.asarray(Image.open(BytesIO(response.content)).convert("RGB"))
+        return high_res, rb, raster_crs, "Colorado Springs Utilities 2024 El Paso County orthophoto"
+    except Exception as exc:
+        print(f"High-resolution CSU imagery unavailable; using NAIP fallback: {exc}")
+        return naip, rb, raster_crs, "USDA NAIP via USGS National Map ImageServer"
+
+
+def make_exhibit(parcel, grid, facilities, table, parking, distances) -> None:
+    rgb, rb, raster_crs, imagery_source = load_basemap()
 
     to_map = Transformer.from_crs(CRS, raster_crs, always_xy=True)
     layers = [x.to_crs(raster_crs) for x in (parcel, grid, facilities, table, parking, distances)]
@@ -201,7 +227,7 @@ def make_exhibit(parcel, grid, facilities, table, parking, distances) -> None:
              "All proposed-use locations are conceptual and subject to field verification. "
              "The 25-foot grid is a square location-reference grid, not survey coordinates.\n\n"
              "Parcel source: El Paso County GIS Open Data, parcel 7103005001.\n"
-             "Imagery source: USDA NAIP via USGS National Map ImageServer.\n"
+             f"Imagery source: {imagery_source}.\n"
              "Coordinate system: NAD83 / Colorado Central (ftUS), EPSG:2232.\n\n"
              "NOT A SURVEY")
     side.text(0, .94, notes, va="top", fontsize=9.5, linespacing=1.35, wrap=True)
